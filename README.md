@@ -1,28 +1,33 @@
 mackerel-plugin-mogilefs [![Build Status](https://travis-ci.org/hfm/mackerel-plugin-mogilefs.svg?branch=master)](https://travis-ci.org/hfm/mackerel-plugin-mogilefs)
 ===
 
-## Description
+MogileFS custom metrics plugin for mackerel.io agent.
 
-## Usage
+Inspired by [`mogilefsd_activity` and `mogilefsd_queries`](http://munin-monitoring.org/browser/munin-contrib/plugins/mogilefs)
 
-## Install
+Synopsis
+---
 
-To install, use `go get`:
-
-```bash
-$ go get -d github.com/hfm/mackerel-plugin-mogilefs
+```sh
+mackerel-plugin-mogilefs [-host=<host>] [-port=<port>] [-tempfile=<tempfile>] [-version]
 ```
 
-## Contribution
+```console
+$ ./mackerel-plugin-mogilefs -h
+Options:
 
-1. Fork ([https://github.com/hfm/mackerel-plugin-mogilefs/fork](https://github.com/hfm/mackerel-plugin-mogilefs/fork))
-1. Create a feature branch
-1. Commit your changes
-1. Rebase your local changes against the master branch
-1. Run test suite with the `go test ./...` command and confirm that it passes
-1. Run `gofmt -s`
-1. Create a new Pull Request
+  -H, -host=127.0.0.1                             Host of mogilefsd
 
-## Author
+  -p, -port=7001                                  Port of mogilefsd
 
-[hfm](https://github.com/hfm)
+  -t, -tempfile=/tmp/mackerel-plugin-mogilefs     Temp file name
+
+  -v, -version=false                              Print version information and quit.
+```
+
+Example of mackerel-agent.conf
+
+```toml
+[plugin.metrics.mogilefs]
+command = "/path/to/mackerel-plugin-mogilefs"
+```
