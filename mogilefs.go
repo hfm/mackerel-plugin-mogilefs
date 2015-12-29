@@ -28,8 +28,8 @@ var graphdef = map[string](mp.Graphs){
 		},
 	},
 	"mogilefs.activity": mp.Graphs{
-		Label: "MoglieFS tracker activity",
-		Unit:  "integer",
+		Label:   "MoglieFS tracker activity",
+		Unit:    "integer",
 		Stacked: true,
 		Metrics: [](mp.Metrics){
 			mp.Metrics{Name: "pending_queries", Label: "Pending queries", Diff: false, Type: "uint64"},
