@@ -18,7 +18,16 @@ const (
 	ExitCodeError int = 1 + iota
 )
 
-// graphdef is Graph definition for mackerelplugin.
+/* graphdef is Graph definition for mackerelplugin.
+
+mogilefs.activity:
+	pending_queries ... The number of workers queued queries
+	processing_queries ... The number of workers processing requests
+	bored_queryworkers ... The number of idle workers
+
+mogilefs.queries:
+	queries ... The number of queries requested from MogileFS clients
+*/
 var graphdef = map[string](mp.Graphs){
 	"mogilefs.activity": mp.Graphs{
 		Label:   "MoglieFS tracker activity",
