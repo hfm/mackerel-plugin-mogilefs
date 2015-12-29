@@ -27,6 +27,19 @@ mogilefs.activity:
 
 mogilefs.queries:
 	queries ... The number of queries requested from MogileFS clients
+
+mogilefs.times_out_of_qworkers:
+	times_out_of_qworkers ... The number of pending queries dispite issued the queues
+
+mogilefs.work_queue_for:
+	work_queue_for_delete ... The number of active delete workers
+	work_queue_for_fsck ... The number of active fsck workers
+	work_queue_for_replicate ... The number of active replicate workers
+
+mogilefs.work_sent_to:
+	work_sent_to_delete ... The number of processed delete worker
+	work_sent_to_fsck ... The number of processed fsck worker
+	work_sent_to_replicate ... The number of processed replicate worker
 */
 var graphdef = map[string](mp.Graphs){
 	"mogilefs.stats.activity": mp.Graphs{
@@ -43,6 +56,31 @@ var graphdef = map[string](mp.Graphs){
 		Unit:  "integer",
 		Metrics: [](mp.Metrics){
 			mp.Metrics{Name: "queries", Label: "queries", Diff: false, Type: "uint64"},
+		},
+	},
+	"mogilefs.stats.times_out_of_qworkers": mp.Graphs{
+		Label: "MogileFS times out of querieworkers",
+		Unit:  "integer",
+		Metrics: [](mp.Metrics){
+			mp.Metrics{Name: "times_out_of_qworkers", Label: "time out of queryworkers", Diff: false, Type: "uint64"},
+		},
+	},
+	"mogilefs.stats.work_queue_for": mp.Graphs{
+		Label: "MogileFS work_queue_for",
+		Unit:  "integer",
+		Metrics: [](mp.Metrics){
+			mp.Metrics{Name: "work_queue_for_delete", Label: "queries", Diff: false, Type: "uint64"},
+			mp.Metrics{Name: "work_queue_for_fsck", Label: "queries", Diff: false, Type: "uint64"},
+			mp.Metrics{Name: "work_queue_for_replicate", Label: "queries", Diff: false, Type: "uint64"},
+		},
+	},
+	"mogilefs.stats.work_sent_to": mp.Graphs{
+		Label: "MogileFS work_sent_to",
+		Unit:  "integer",
+		Metrics: [](mp.Metrics){
+			mp.Metrics{Name: "work_sent_to_delete", Label: "queries", Diff: false, Type: "uint64"},
+			mp.Metrics{Name: "work_sent_to_fsck", Label: "queries", Diff: false, Type: "uint64"},
+			mp.Metrics{Name: "work_sent_to_replicate", Label: "queries", Diff: false, Type: "uint64"},
 		},
 	},
 }
