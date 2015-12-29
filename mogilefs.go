@@ -27,7 +27,7 @@ var graphdef = map[string](mp.Graphs){
 			mp.Metrics{Name: "queries", Label: "queries", Diff: false, Type: "uint64"},
 		},
 	},
-	"mogilefs.stats": mp.Graphs{
+	"mogilefs.activity": mp.Graphs{
 		Label: "MoglieFS tracker activity",
 		Unit:  "integer",
 		Stacked: true,
