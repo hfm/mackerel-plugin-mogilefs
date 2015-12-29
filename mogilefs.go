@@ -29,7 +29,7 @@ mogilefs.queries:
 	queries ... The number of queries requested from MogileFS clients
 */
 var graphdef = map[string](mp.Graphs){
-	"mogilefs.activity": mp.Graphs{
+	"mogilefs.stats.activity": mp.Graphs{
 		Label:   "MoglieFS tracker activity",
 		Unit:    "integer",
 		Metrics: [](mp.Metrics){
@@ -38,7 +38,7 @@ var graphdef = map[string](mp.Graphs){
 			mp.Metrics{Name: "bored_queryworkers", Label: "Bored queryworkers", Diff: false, Type: "uint64", Stacked: true},
 		},
 	},
-	"mogilefs.queries": mp.Graphs{
+	"mogilefs.stats.queries": mp.Graphs{
 		Label: "MogileFS tracker queries",
 		Unit:  "integer",
 		Metrics: [](mp.Metrics){
