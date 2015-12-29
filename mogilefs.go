@@ -20,14 +20,14 @@ const (
 
 // graphdef is Graph definition for mackerelplugin.
 var graphdef = map[string](mp.Graphs){
-	"mogilefsd.queries": mp.Graphs{
+	"mogilefs.queries": mp.Graphs{
 		Label: "MogileFS tracker queries",
 		Unit:  "integer",
 		Metrics: [](mp.Metrics){
 			mp.Metrics{Name: "queries", Label: "queries", Diff: false, Type: "uint64"},
 		},
 	},
-	"mogilefsd.stats": mp.Graphs{
+	"mogilefs.stats": mp.Graphs{
 		Label: "MoglieFS tracker activity",
 		Unit:  "integer",
 		Stacked: true,
