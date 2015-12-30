@@ -69,18 +69,18 @@ var graphdef = map[string](mp.Graphs){
 		Label: "MogileFS work_queue_for",
 		Unit:  "integer",
 		Metrics: [](mp.Metrics){
-			mp.Metrics{Name: "work_queue_for_delete", Label: "queries", Diff: false, Type: "uint64"},
-			mp.Metrics{Name: "work_queue_for_fsck", Label: "queries", Diff: false, Type: "uint64"},
-			mp.Metrics{Name: "work_queue_for_replicate", Label: "queries", Diff: false, Type: "uint64"},
+			mp.Metrics{Name: "work_queue_for_delete", Label: "work_queue_for_delete", Diff: false, Type: "uint64"},
+			mp.Metrics{Name: "work_queue_for_fsck", Label: "work_queue_for_fsck", Diff: false, Type: "uint64"},
+			mp.Metrics{Name: "work_queue_for_replicate", Label: "work_queue_for_replicate", Diff: false, Type: "uint64"},
 		},
 	},
 	"mogilefs.stats.work_sent_to": mp.Graphs{
 		Label: "MogileFS work_sent_to",
 		Unit:  "integer",
 		Metrics: [](mp.Metrics){
-			mp.Metrics{Name: "work_sent_to_delete", Label: "queries", Diff: false, Type: "uint64"},
-			mp.Metrics{Name: "work_sent_to_fsck", Label: "queries", Diff: false, Type: "uint64"},
-			mp.Metrics{Name: "work_sent_to_replicate", Label: "queries", Diff: false, Type: "uint64"},
+			mp.Metrics{Name: "work_sent_to_delete", Label: "work_sent_to_delete", Diff: false, Type: "uint64"},
+			mp.Metrics{Name: "work_sent_to_fsck", Label: "work_sent_to_fsck", Diff: false, Type: "uint64"},
+			mp.Metrics{Name: "work_sent_to_replicate", Label: "work_sent_to_replicate", Diff: false, Type: "uint64"},
 		},
 	},
 }
