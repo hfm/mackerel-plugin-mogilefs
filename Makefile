@@ -22,4 +22,7 @@ build: deps
 install: deps
 	go install $(BUILD_FLAGS)
 
+package: deps
+	@sh -c "'$(CURDIR)/scripts/package.sh'"
+
 .PHONY: build cover test deps install
