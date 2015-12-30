@@ -15,3 +15,11 @@ cover: deps
 	go test $(TEST) -coverprofile=coverage.out
 	go tool cover -html=coverage.out
 	rm coverage.out
+
+build: deps
+	go build $(BUILD_FLAGS)
+
+install: deps
+	go install $(BUILD_FLAGS)
+
+.PHONY: build cover test deps install
