@@ -10,3 +10,8 @@ test: deps
 	go test -v ./...
 	go test -race ./...
 	go vet .
+
+cover: deps
+	go test $(TEST) -coverprofile=coverage.out
+	go tool cover -html=coverage.out
+	rm coverage.out
