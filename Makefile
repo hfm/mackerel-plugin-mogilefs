@@ -1,4 +1,4 @@
-COMMIT = $$(git describe --always)
+COMMIT = $$(git describe --tags --always)
 BUILD_FLAGS = -ldflags "-X main.GitCommit=\"$(COMMIT)\""
 
 deps:
