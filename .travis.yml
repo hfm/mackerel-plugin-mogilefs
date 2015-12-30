@@ -17,6 +17,5 @@ deploy:
   skip_cleanup: true
   on:
     repo: hfm/mackerel-plugin-mogilefs
-    branch: master
     condition: $TRAVIS_GO_VERSION = 1.5.2
-  tags: true
+    tags: true
