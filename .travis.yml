@@ -20,3 +20,4 @@ deploy:
     repo: hfm/mackerel-plugin-mogilefs
     branch: master
     condition: "$TRAVIS_GO_VERSION = go1.5.2"
+  tags: true
