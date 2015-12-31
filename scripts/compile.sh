@@ -1,4 +1,6 @@
 #!/bin/bash
+#
+# Original from: http://deeeet.com/writing/2014/05/19/gox/
 
 set -e
 
