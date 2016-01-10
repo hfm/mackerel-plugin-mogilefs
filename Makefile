@@ -1,6 +1,10 @@
 COMMIT = $$(git describe --tags --always)
 BUILD_FLAGS = -ldflags "-X main.GitCommit=\"$(COMMIT)\""
 
+clean:
+	rm -f mackerel-plugin-mogilefs
+	rm -fr pkg/
+
 deps:
 	go get -d -t ./...
 	go get golang.org/x/tools/cmd/cover
