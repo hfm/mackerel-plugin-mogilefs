@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	mp "github.com/mackerelio/go-mackerel-plugin-helper"
-	flag "github.com/tcnksm/mflag"
+	flag "github.com/docker/docker/pkg/mflag"
 )
 
 // Exit codes are int values that represent an exit code for a particular error.
