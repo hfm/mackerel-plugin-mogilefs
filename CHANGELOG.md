@@ -15,18 +15,6 @@ Fix label name (typo)
 
 Change the repository of mflag
 
-### Added
-
-- Nothing
-
-### Deprecated
-
-- Nothing
-
-### Removed
-
-- Nothing
-
 ### Fixed
 
 - Change from tcnksm/mflag to [docker/docker/pkg/mflag](https://github.com/docker/docker/tree/master/pkg/mflag)
@@ -35,18 +23,6 @@ Change the repository of mflag
 ---
 
 Fix label names
-
-### Added
-
-- Nothing
-
-### Deprecated
-
-- Nothing
-
-### Removed
-
-- Nothing
 
 ### Fixed
 
@@ -64,18 +40,6 @@ Add new graphs
 - times\_out\_of\_qworkers
 - work\_queue\_for
 - work\_sent\_to
-
-### Deprecated
-
-- Nothing
-
-### Removed
-
-- Nothing
-
-### Fixed
-
-- Nothing
 
 0.1.0 (2015-12-30)
 ---
