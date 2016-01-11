@@ -1,6 +1,29 @@
 CHANGELOG
 ===
 
+0.2.1 (2015-12-30)
+---
+
+Fix label names
+
+### Added
+
+- Nothing
+
+### Deprecated
+
+- Nothing
+
+### Removed
+
+- Nothing
+
+### Fixed
+
+- Fixed label name of:
+  - `work_queue_for_*`
+  - `work_sent_to_*`
+
 0.2.0 (2015-12-30)
 ---
 
