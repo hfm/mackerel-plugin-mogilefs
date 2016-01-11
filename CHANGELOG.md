@@ -1,6 +1,27 @@
 CHANGELOG
 ===
 
+0.3.0 (2016-01-10)
+---
+
+Change the repository of mflag
+
+### Added
+
+- Nothing
+
+### Deprecated
+
+- Nothing
+
+### Removed
+
+- Nothing
+
+### Fixed
+
+- Change from tcnksm/mflag to [docker/docker/pkg/mflag](https://github.com/docker/docker/tree/master/pkg/mflag)
+
 0.2.1 (2015-12-30)
 ---
 
