@@ -43,7 +43,7 @@ mogilefs.work_sent_to:
 */
 var graphdef = map[string](mp.Graphs){
 	"mogilefs.stats.activity": mp.Graphs{
-		Label: "MoglieFS tracker activity",
+		Label: "MogileFS tracker activity",
 		Unit:  "integer",
 		Metrics: [](mp.Metrics){
 			mp.Metrics{Name: "pending_queries", Label: "Pending queries", Diff: false, Type: "uint64"},

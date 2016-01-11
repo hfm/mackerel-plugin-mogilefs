@@ -1,6 +1,15 @@
 CHANGELOG
 ===
 
+0.3.1 (2016-01-11)
+---
+
+Fix label name (typo)
+
+### Fixed
+
+- s/MoglieFS/MogileFS/
+
 0.3.0 (2016-01-10)
 ---
 
