@@ -12,10 +12,10 @@ deploy:
   provider: releases
   api_key:
     secure: JJtg1hfiaWM09ugh0ynFbXzXs39ZD+vG87XOH1CiULCtCclf/xK5Cyn4tS/H3ICGDsszZprq7zsn33z1+98+lwLXXjb5fzj1fxhcMphUlobdaSMnSTDmkbyHj3hh/SO8K6y+aBLXz2AB5uFqJwHlcOGaydmBGKHi+xTqMC0N7MNbi7J2RCmlMtRgWZ5zXM27VeCF/utXHcBuoAn9/zIj8+wSHMsvXPIb/oQJ/xSHPbH8R/ll8iMJqoWuLqyBiXf6ycUoVUZjhER8hKSqwfDcKFKxUjgReiisZ9NZ77ludKBiea6oFWTrj99yXMp8aajWZU4XnFjKHYdk42icZ1Q+wXhvrVAQJZ/dkW4aTY/0xuI12L8y0ssOjnQBwnKizWLychmYfiONlvjRcHV/g9K1qUyF+KDayoVZwFcMiicELVBIXPG5jCvxeZyomZLk7AcyEglo6DRpuG0Wa+2QtsofxB/5B8cFdjbzmA6+t8ymloIFd8f2qdAa5XMorVp7nvKkV2nA1bKGmD7tKYyQ4G/VbYMzFgIQhVN8VOxFFrEuKDAYlpHfBjZ1xpw0JUmyS0P0hA71niLFgCED97QwFUNs1rMw+W/iqzbymGA/4rA7Oy/x2RCh1vW1eaa5I7Y83NUW8V9d+5WuUSZlpQIylvz6AxUzGGlsjb+vhFjm562Oif8=
-  file: "pkg/dist/*/*"
+  file: pkg/dist/*/*
   file_glob: true
   skip_cleanup: true
   on:
     repo: hfm/mackerel-plugin-mogilefs
-    condition: $TRAVIS_GO_VERSION = 1.5.2
+    condition: "$TRAVIS_GO_VERSION = 1.5.2"
     tags: true
