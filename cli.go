@@ -1,21 +1,19 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"io"
 	"net"
-	"os"
-	"strings"
 
-	mp "github.com/mackerelio/go-mackerel-plugin-helper"
 	flag "github.com/docker/docker/pkg/mflag"
+	mp "github.com/mackerelio/go-mackerel-plugin-helper"
 )
 
 // Exit codes are int values that represent an exit code for a particular error.
 const (
 	ExitCodeOK    int = 0
-	ExitCodeError int = 1 + iota
+	ExitCodeParseFlagError int = 1 + iota
+	ExitCodeError
 )
 
 /* graphdef is Graph definition for mackerelplugin.
@@ -109,35 +107,18 @@ func (m MogilefsPlugin) FetchMetrics() (map[string]interface{}, error) {
 	return m.parseStats(conn)
 }
 
-func (m MogilefsPlugin) parseStats(conn io.Reader) (map[string]interface{}, error) {
-	scanner := bufio.NewScanner(conn)
-	stats := make(map[string]interface{})
-
-	for scanner.Scan() {
-		line := scanner.Text()
-		s := string(line)
-		if s == "." {
-			return stats, nil
-		}
-
-		res := strings.Split(s, " ")
-		stats[res[0]] = res[1]
-	}
-
-	if err := scanner.Err(); err != nil {
-		return stats, err
-	}
-
-	return nil, nil
-}
-
 // GraphDefinition interface for mackerelplugin.
 func (m MogilefsPlugin) GraphDefinition() map[string](mp.Graphs) {
 	return graphdef
 }
 
-// Parse flags and Run helper (MackerelPlugin) with the given arguments.
-func main() {
+// CLI is the object for command line interface.
+type CLI struct {
+	outStream, errStream io.Writer
+}
+
+// Run is to parse flags and Run helper (MackerelPlugin) with the given arguments.
+func (c *CLI) Run(args []string) int {
 	// Flags
 	var (
 		host     string
@@ -155,14 +136,14 @@ func main() {
 	flags.BoolVar(&version, []string{"v", "version"}, false, "Print version information and quit.")
 
 	// Parse commandline flag
-	if err := flags.Parse(os.Args[1:]); err != nil {
-		os.Exit(ExitCodeError)
+	if err := flags.Parse(args[1:]); err != nil {
+		return ExitCodeError
 	}
 
 	// Show version
 	if version {
-		fmt.Fprintf(os.Stderr, "%s version %s\n", Name, Version)
-		os.Exit(ExitCodeOK)
+		fmt.Fprintf(c.errStream, "%s version %s\n", Name, Version)
+		return ExitCodeOK
 	}
 
 	// Create MackerelPlugin for MogileFS
@@ -172,4 +153,6 @@ func main() {
 	helper.Tempfile = tempfile
 
 	helper.Run()
+
+	return ExitCodeOK
 }

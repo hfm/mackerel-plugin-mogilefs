@@ -6,15 +6,6 @@ import (
 	"testing"
 )
 
-func TestGraphDefinition(t *testing.T) {
-	var mogilefs MogilefsPlugin
-
-	graphdef := mogilefs.GraphDefinition()
-	if len(graphdef) != 5 {
-		t.Errorf("GetTempfilename: %d should be 5", len(graphdef))
-	}
-}
-
 func TestParse(t *testing.T) {
 	var mogilefs MogilefsPlugin
 	stub := `uptime 35235
