@@ -1,13 +1,21 @@
-CHANGELOG
-===
+0.4.0 (2016-02-22)
+---
+
+### Summary
+
+Built by go 1.6
 
 0.3.2 (2016-01-14)
 ---
+
+### Summary
 
 Built by go 1.5.3
 
 0.3.1 (2016-01-11)
 ---
+
+### Summary
 
 Fix label name (typo)
 
@@ -18,6 +26,8 @@ Fix label name (typo)
 0.3.0 (2016-01-10)
 ---
 
+### Summary
+
 Change the repository of mflag
 
 ### Fixed
@@ -26,6 +36,8 @@ Change the repository of mflag
 
 0.2.1 (2015-12-30)
 ---
+
+### Summary
 
 Fix label names
 
@@ -38,6 +50,8 @@ Fix label names
 0.2.0 (2015-12-30)
 ---
 
+### Summary
+
 Add new graphs
 
 ### Added
@@ -48,6 +62,8 @@ Add new graphs
 
 0.1.0 (2015-12-30)
 ---
+
+### Summary
 
 Initial release
 

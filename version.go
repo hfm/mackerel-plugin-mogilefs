@@ -4,4 +4,4 @@ package main
 const Name string = "mackerel-plugin-mogilefs"
 
 // Version is version string of this application.
-const Version string = "0.3.2"
+const Version string = "0.4.1"
