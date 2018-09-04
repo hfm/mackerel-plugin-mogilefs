@@ -1,13 +1,12 @@
-package main
+package mpmogilefs
 
 import (
 	"bytes"
-	"fmt"
 	"testing"
 )
 
 func TestParse(t *testing.T) {
-	var mogilefs MogilefsPlugin
+	var mogilefs MogileFSPlugin
 	stub := `uptime 35235
 pending_queries 5
 processing_queries 38
@@ -20,9 +19,17 @@ work_sent_to_delete 6
 
 	mogilefsStats := bytes.NewBufferString(stub)
 
-	stats, err := mogilefs.parseStats(mogilefsStats)
-	fmt.Println(stats)
+	_, err := mogilefs.parseStats(mogilefsStats)
 	if err != nil {
 		t.Errorf("%v", err)
+	}
+}
+
+func TestGraphDefinition(t *testing.T) {
+	var mogilefs MogileFSPlugin
+
+	graphdef := mogilefs.GraphDefinition()
+	if len(graphdef) != 5 {
+		t.Errorf("GetTempfilename: %d should be 5", len(graphdef))
 	}
 }

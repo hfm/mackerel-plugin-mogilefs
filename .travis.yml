@@ -1,24 +1,8 @@
 language: go
 go:
-- 1.6
-- tip
-env: PATH=/home/travis/gopath/bin:$PATH
-install: go get github.com/mitchellh/gox
-script: make test
+- 1.11.x
+script:
+- make test
+- make lint
 after_success:
-- echo "packaging by ${TRAVIS_GO_VERSION}"
-- make package
-deploy:
-  provider: releases
-  api_key:
-    secure: JJtg1hfiaWM09ugh0ynFbXzXs39ZD+vG87XOH1CiULCtCclf/xK5Cyn4tS/H3ICGDsszZprq7zsn33z1+98+lwLXXjb5fzj1fxhcMphUlobdaSMnSTDmkbyHj3hh/SO8K6y+aBLXz2AB5uFqJwHlcOGaydmBGKHi+xTqMC0N7MNbi7J2RCmlMtRgWZ5zXM27VeCF/utXHcBuoAn9/zIj8+wSHMsvXPIb/oQJ/xSHPbH8R/ll8iMJqoWuLqyBiXf6ycUoVUZjhER8hKSqwfDcKFKxUjgReiisZ9NZ77ludKBiea6oFWTrj99yXMp8aajWZU4XnFjKHYdk42icZ1Q+wXhvrVAQJZ/dkW4aTY/0xuI12L8y0ssOjnQBwnKizWLychmYfiONlvjRcHV/g9K1qUyF+KDayoVZwFcMiicELVBIXPG5jCvxeZyomZLk7AcyEglo6DRpuG0Wa+2QtsofxB/5B8cFdjbzmA6+t8ymloIFd8f2qdAa5XMorVp7nvKkV2nA1bKGmD7tKYyQ4G/VbYMzFgIQhVN8VOxFFrEuKDAYlpHfBjZ1xpw0JUmyS0P0hA71niLFgCED97QwFUNs1rMw+W/iqzbymGA/4rA7Oy/x2RCh1vW1eaa5I7Y83NUW8V9d+5WuUSZlpQIylvz6AxUzGGlsjb+vhFjm562Oif8=
-  file: pkg/dist/*/*
-  file_glob: true
-  skip_cleanup: true
-  on:
-    repo: hfm/mackerel-plugin-mogilefs
-    condition: "$TRAVIS_GO_VERSION = 1.6"
-    tags: true
-notifications:
-  slack:
-    secure: hnaMhM7ZDy2+rNPXRKfz9Z10ZxKvLFJuQaxU5xC3JnZ2B3ddx9iXwgATtIOy/5n6PLxIm9pselGFXPJ2kE9uTMOz2l0+at5rfFySFBiO1E+s9S2EmQMe7j447tZdt93A9WnKOjBdvkP5g2G4B68sFDDh+w4lh5TzsJX1h3XGcNLXq/UfHJ4hViQMhOGRIBgyaduJg651Wq8zvjfgDK4MWNhkt848X1qmxUjAeZZxEjfCaScoWv2R0YkYCwJgFIJTEGnst6gKh6dO9GdjYq1PdpO2TVbJMatRS6jW33YBIbHD//h6Yt2dchPX9QPwfqJMvWXOEamUUtdTYgil13wBWPh7x3rOBcXRdbvxJhp3M3+EPffXNWjY+hJM5m5A6epWN0OFz81JKr5RdiT2cqnDGY8a8bSPIcBCURvpZDgJTapbJkeF7DusSENpCl/68uz0loqCj8MePpHwJYb7MTvMKFOPyUtZrsoeHdQp6UwRC9ZS013nh/JLgCqwLHl5FRBWQmt4RqUBsRWcgvP8bgU4F7L7shHpOkHaVYU8wODNMHqnBhpCQHVbaQOWv4sADpOQtYjkNH95KMRCdnInoyuj4JmPHgcY4EdXwFmeLbvwmsNfNqIotN/J5FfXu5Owxq8RLLh/tMywkqsr/Hli4JqdGhJwydFkM2VY52Fid7w0OS8=
+- if [[ $TRAVIS_TAG =~ ^v[0-9].*$ ]]; then script/release; fi
