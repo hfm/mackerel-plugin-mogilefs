@@ -2,7 +2,6 @@ package mpmogilefs
 
 import (
 	"bytes"
-	"fmt"
 	"testing"
 )
 
