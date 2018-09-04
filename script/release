@@ -7,4 +7,4 @@
 set -e
 latest_tag=$(git describe --abbrev=0 --tags)
 goxz -d dist/$latest_tag -z -os windows,darwin,linux -arch amd64,386
-ghr -u hfm -r mackerel-plugin-unound $latest_tag dist/$latest_tag
+ghr -u hfm -r mackerel-plugin-mogilefs $latest_tag dist/$latest_tag
