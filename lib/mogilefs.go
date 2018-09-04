@@ -2,42 +2,14 @@ package mpmogilefs
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"io"
 	"net"
+	"strconv"
 	"strings"
 
-	flag "github.com/docker/docker/pkg/mflag"
-	mp "github.com/mackerelio/go-mackerel-plugin-helper"
-)
-
-func (m MogilefsPlugin) parseStats(conn io.Reader) (map[string]interface{}, error) {
-	scanner := bufio.NewScanner(conn)
-	stats := make(map[string]interface{})
-
-	for scanner.Scan() {
-		line := scanner.Text()
-		s := string(line)
-		if s == "." {
-			return stats, nil
-		}
-
-		res := strings.Split(s, " ")
-		stats[res[0]] = res[1]
-	}
-
-	if err := scanner.Err(); err != nil {
-		return stats, err
-	}
-
-	return nil, nil
-}
-
-// Exit codes are int values that represent an exit code for a particular error.
-const (
-	ExitCodeOK             int = 0
-	ExitCodeParseFlagError int = 1 + iota
-	ExitCodeError
+	mp "github.com/mackerelio/go-mackerel-plugin"
 )
 
 /* graphdef is Graph definition for mackerelplugin.
@@ -63,120 +35,126 @@ mogilefs.work_sent_to:
 	work_sent_to_fsck ... The number of processed fsck worker
 	work_sent_to_replicate ... The number of processed replicate worker
 */
-var graphdef = map[string](mp.Graphs){
-	"mogilefs.stats.activity": mp.Graphs{
-		Label: "MogileFS tracker activity",
-		Unit:  "integer",
-		Metrics: [](mp.Metrics){
-			mp.Metrics{Name: "pending_queries", Label: "Pending queries", Diff: false, Type: "uint64"},
-			mp.Metrics{Name: "processing_queries", Label: "Processing queries", Diff: false, Type: "uint64", Stacked: true},
-			mp.Metrics{Name: "bored_queryworkers", Label: "Bored queryworkers", Diff: false, Type: "uint64", Stacked: true},
+func (m *MogileFSPlugin) mogilefsGraphDef() map[string]mp.Graphs {
+	labelPrefix := strings.Title(strings.Replace(m.MetricKeyPrefix(), "mogilefs", "MogileFS", -1))
+	return map[string]mp.Graphs{
+		"mogilefs.stats.activity": {
+			Label: labelPrefix + " tracker activity",
+			Unit:  mp.UnitInteger,
+			Metrics: []mp.Metrics{
+				{Name: "pending_queries", Label: "Pending queries"},
+				{Name: "processing_queries", Label: "Processing queries", Stacked: true},
+				{Name: "bored_queryworkers", Label: "Bored queryworkers", Stacked: true},
+			},
 		},
-	},
-	"mogilefs.stats.queries": mp.Graphs{
-		Label: "MogileFS tracker queries",
-		Unit:  "integer",
-		Metrics: [](mp.Metrics){
-			mp.Metrics{Name: "queries", Label: "queries", Diff: false, Type: "uint64"},
+		"mogilefs.stats.queries": {
+			Label: labelPrefix + " tracker queries",
+			Unit:  mp.UnitInteger,
+			Metrics: []mp.Metrics{
+				{Name: "queries", Label: "queries"},
+			},
 		},
-	},
-	"mogilefs.stats.times_out_of_qworkers": mp.Graphs{
-		Label: "MogileFS times out of querieworkers",
-		Unit:  "integer",
-		Metrics: [](mp.Metrics){
-			mp.Metrics{Name: "times_out_of_qworkers", Label: "time out of queryworkers", Diff: false, Type: "uint64"},
+		"mogilefs.stats.times_out_of_qworkers": {
+			Label: labelPrefix + " times out of querieworkers",
+			Unit:  mp.UnitInteger,
+			Metrics: []mp.Metrics{
+				{Name: "times_out_of_qworkers", Label: "time out of queryworkers"},
+			},
 		},
-	},
-	"mogilefs.stats.work_queue_for": mp.Graphs{
-		Label: "MogileFS work_queue_for",
-		Unit:  "integer",
-		Metrics: [](mp.Metrics){
-			mp.Metrics{Name: "work_queue_for_delete", Label: "work_queue_for_delete", Diff: false, Type: "uint64"},
-			mp.Metrics{Name: "work_queue_for_fsck", Label: "work_queue_for_fsck", Diff: false, Type: "uint64"},
-			mp.Metrics{Name: "work_queue_for_replicate", Label: "work_queue_for_replicate", Diff: false, Type: "uint64"},
+		"mogilefs.stats.work_queue_for": {
+			Label: labelPrefix + " work_queue_for",
+			Unit:  mp.UnitInteger,
+			Metrics: []mp.Metrics{
+				{Name: "work_queue_for_delete", Label: "work_queue_for_delete"},
+				{Name: "work_queue_for_fsck", Label: "work_queue_for_fsck"},
+				{Name: "work_queue_for_replicate", Label: "work_queue_for_replicate"},
+			},
 		},
-	},
-	"mogilefs.stats.work_sent_to": mp.Graphs{
-		Label: "MogileFS work_sent_to",
-		Unit:  "integer",
-		Metrics: [](mp.Metrics){
-			mp.Metrics{Name: "work_sent_to_delete", Label: "work_sent_to_delete", Diff: false, Type: "uint64"},
-			mp.Metrics{Name: "work_sent_to_fsck", Label: "work_sent_to_fsck", Diff: false, Type: "uint64"},
-			mp.Metrics{Name: "work_sent_to_replicate", Label: "work_sent_to_replicate", Diff: false, Type: "uint64"},
+		"mogilefs.stats.work_sent_to": {
+			Label: labelPrefix + " work_sent_to",
+			Unit:  mp.UnitInteger,
+			Metrics: []mp.Metrics{
+				{Name: "work_sent_to_delete", Label: "work_sent_to_delete"},
+				{Name: "work_sent_to_fsck", Label: "work_sent_to_fsck"},
+				{Name: "work_sent_to_replicate", Label: "work_sent_to_replicate"},
+			},
 		},
-	},
+	}
 }
 
-// MogilefsPlugin mackerel plugin for MoglieFS.
-type MogilefsPlugin struct {
-	Target string
+// MogileFSPlugin mackerel plugin for MoglieFS.
+type MogileFSPlugin struct {
+	Target   string
+	Tempfile string
+	prefix   string
+}
+
+// MetricKeyPrefix interface for PluginWithPrefix
+func (m *MogileFSPlugin) MetricKeyPrefix() string {
+	if m.prefix == "" {
+		m.prefix = "mogilefs"
+	}
+	return m.prefix
+}
+
+func (m *MogileFSPlugin) parseStats(conn io.Reader) (map[string]float64, error) {
+	scanner := bufio.NewScanner(conn)
+	stats := make(map[string]float64)
+	var err error
+
+	for scanner.Scan() {
+		line := scanner.Text()
+		s := string(line)
+		if s == "." {
+			return stats, nil
+		}
+
+		res := strings.Split(s, " ")
+		stats[res[0]], err = strconv.ParseFloat(res[1], 64)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	if err = scanner.Err(); err != nil {
+		return stats, err
+	}
+	return nil, nil
 }
 
 // FetchMetrics interface for mackerelplugin.
-func (m MogilefsPlugin) FetchMetrics() (map[string]interface{}, error) {
-	raddr, err := net.ResolveTCPAddr("tcp", m.Target)
+func (m *MogileFSPlugin) FetchMetrics() (map[string]float64, error) {
+	conn, err := net.Dial("tcp", m.Target)
 	if err != nil {
-		_ = fmt.Errorf("Relosve error: %v\n", err)
-		return nil, err
-	}
-
-	conn, err := net.DialTCP("tcp", nil, raddr)
-	if err != nil {
-		_ = fmt.Errorf("DialTCP error: %v\n", err)
 		return nil, err
 	}
 
 	fmt.Fprintln(conn, "!stats")
+	stats, err := m.parseStats(conn)
 
-	return m.parseStats(conn)
+	return stats, err
 }
 
 // GraphDefinition interface for mackerelplugin.
-func (m MogilefsPlugin) GraphDefinition() map[string](mp.Graphs) {
-	return graphdef
+func (m *MogileFSPlugin) GraphDefinition() map[string]mp.Graphs {
+	return m.mogilefsGraphDef()
 }
 
-// CLI is the object for command line interface.
-type CLI struct {
-	outStream, errStream io.Writer
-}
+// Do the plugin
+func Do() {
+	optHost := flag.String("host", "127.0.0.1", "Hostname")
+	optPort := flag.String("port", "7001", "Port")
+	optTempfile := flag.String("tempfile", "", "Temp file name")
+	optMetricKeyPrefix := flag.String("metric-key-prefix", "proxysql", "metric key prefix")
 
-// Run is to parse flags and Run helper (MackerelPlugin) with the given arguments.
-func (c *CLI) Run(args []string) int {
-	// Flags
-	var (
-		host     string
-		port     string
-		tempfile string
-		version  bool
-	)
+	flag.Parse()
 
-	// Define option flag parse
-	flags := flag.NewFlagSet(Name, flag.ContinueOnError)
+	var mogilefs MogileFSPlugin
 
-	flags.StringVar(&host, []string{"H", "host"}, "127.0.0.1", "Host of mogilefsd")
-	flags.StringVar(&port, []string{"p", "port"}, "7001", "Port of mogilefsd")
-	flags.StringVar(&tempfile, []string{"t", "tempfile"}, "/tmp/mackerel-plugin-mogilefs", "Temp file name")
-	flags.BoolVar(&version, []string{"v", "version"}, false, "Print version information and quit.")
-
-	// Parse commandline flag
-	if err := flags.Parse(args[1:]); err != nil {
-		return ExitCodeError
-	}
-
-	// Show version
-	if version {
-		fmt.Fprintf(c.errStream, "%s version %s\n", Name, Version)
-		return ExitCodeOK
-	}
-
-	// Create MackerelPlugin for MogileFS
-	var mogilefs MogilefsPlugin
-	mogilefs.Target = net.JoinHostPort(host, port)
-	helper := mp.NewMackerelPlugin(mogilefs)
-	helper.Tempfile = tempfile
+	mogilefs.Target = net.JoinHostPort(*optHost, *optPort)
+	mogilefs.prefix = *optMetricKeyPrefix
+	helper := mp.NewMackerelPlugin(&mogilefs)
+	helper.Tempfile = *optTempfile
 
 	helper.Run()
-
-	return ExitCodeOK
 }
