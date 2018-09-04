@@ -1,3 +1,7 @@
+## [v0.5.0](https://github.com/hfm/mackerel-plugin-mogilefs/compare/v0.4.1...v0.5.0) (2018-09-05)
+
+* Refactor [#9](https://github.com/hfm/mackerel-plugin-mogilefs/pull/9) ([hfm](https://github.com/hfm))
+
 0.4.0 (2016-02-22)
 ---
 
