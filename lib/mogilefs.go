@@ -1,17 +1,41 @@
-package main
+package mpmogilefs
 
 import (
+	"bufio"
 	"fmt"
 	"io"
 	"net"
+	"strings"
 
 	flag "github.com/docker/docker/pkg/mflag"
 	mp "github.com/mackerelio/go-mackerel-plugin-helper"
 )
 
+func (m MogilefsPlugin) parseStats(conn io.Reader) (map[string]interface{}, error) {
+	scanner := bufio.NewScanner(conn)
+	stats := make(map[string]interface{})
+
+	for scanner.Scan() {
+		line := scanner.Text()
+		s := string(line)
+		if s == "." {
+			return stats, nil
+		}
+
+		res := strings.Split(s, " ")
+		stats[res[0]] = res[1]
+	}
+
+	if err := scanner.Err(); err != nil {
+		return stats, err
+	}
+
+	return nil, nil
+}
+
 // Exit codes are int values that represent an exit code for a particular error.
 const (
-	ExitCodeOK    int = 0
+	ExitCodeOK             int = 0
 	ExitCodeParseFlagError int = 1 + iota
 	ExitCodeError
 )

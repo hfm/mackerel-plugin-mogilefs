@@ -1,10 +1,7 @@
 package main
 
-import (
-	"os"
-)
+import "github.com/hfm/mackerel-plugin-mogilefs/lib"
 
 func main() {
-	cli := &CLI{outStream: os.Stdout, errStream: os.Stderr}
-	os.Exit(cli.Run(os.Args))
+	mpmogilefs.Do()
 }
