@@ -19,7 +19,7 @@ work_sent_to_delete 6
 
 	mogilefsStats := bytes.NewBufferString(stub)
 
-	stats, err := mogilefs.parseStats(mogilefsStats)
+	_, err := mogilefs.parseStats(mogilefsStats)
 	if err != nil {
 		t.Errorf("%v", err)
 	}
